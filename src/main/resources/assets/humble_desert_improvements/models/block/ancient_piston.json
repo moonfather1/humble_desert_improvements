@@ -1,0 +1,37 @@
+{
+	"credit": "Made with Blockbench",
+    "parent": "minecraft:block/cube_all", 
+    "textures": {
+		"sandstone": "minecraft:block/sandstone",
+		"sandstone_b": "minecraft:block/sandstone_bottom",
+		"particle": "minecraft:block/piston_top",
+		"side": "minecraft:block/piston_side",
+        "platform": "minecraft:block/piston_top"
+    },
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 4],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#platform", "cullface": "north"},
+				"east": {"uv": [0, 0, 16, 4], "rotation": 90, "texture": "#side", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#platform", "cullface": "south"},
+				"west": {"uv": [0, 0, 16, 4], "rotation": 270, "texture": "#side", "cullface": "west"},
+				"up": {"uv": [0, 0, 16, 4], "texture": "#side", "cullface": "up"},
+				"down": {"uv": [0, 0, 16, 4], "rotation": 180, "texture": "#side", "cullface": "down"}
+			}
+		},
+		{
+			"from": [0, 0, 4],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#platform", "cullface": "north"},
+				"east": {"uv": [0, 2, 16, 14], "rotation": 90, "texture": "#sandstone", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#sandstone_b", "cullface": "south"},
+				"west": {"uv": [0, 2, 16, 14], "rotation": 270, "texture": "#sandstone", "cullface": "west"},
+				"up": {"uv": [0, 2, 16, 14], "texture": "#sandstone", "cullface": "up"},
+				"down": {"uv": [0, 2, 16, 14], "rotation": 180, "texture": "#sandstone", "cullface": "down"}
+			}
+		}
+	]
+}
