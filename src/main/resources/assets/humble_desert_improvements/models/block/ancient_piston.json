@@ -1,13 +1,13 @@
 {
 	"credit": "Made with Blockbench",
-    "parent": "minecraft:block/cube_all", 
-    "textures": {
+	"parent": "minecraft:block/cube_all", 
+	"textures": {
 		"sandstone": "minecraft:block/sandstone",
 		"sandstone_b": "minecraft:block/sandstone_bottom",
 		"particle": "minecraft:block/piston_top",
 		"side": "minecraft:block/piston_side",
-        "platform": "minecraft:block/piston_top"
-    },
+		"platform": "minecraft:block/piston_top"
+	},
 	"elements": [
 		{
 			"from": [0, 0, 0],

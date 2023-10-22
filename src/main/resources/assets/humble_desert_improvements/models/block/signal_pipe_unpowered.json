@@ -1,0 +1,8 @@
+{   "parent": "humble_desert_improvements:block/signal_pipe_powered",
+    "render_type": "cutout_mipped",
+    "textures": 
+	{
+        "overlay_in": "humble_desert_improvements:block/sandstone_pipe_input_unpowered",
+		"overlay_out": "humble_desert_improvements:block/sandstone_pipe_output_unpowered"
+    }
+}

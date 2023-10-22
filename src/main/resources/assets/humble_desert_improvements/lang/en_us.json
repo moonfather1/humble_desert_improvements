@@ -1,4 +1,10 @@
 {
 	"item.humble_desert_improvements.ancient_piston": "Crumbling piston",
-	"block.humble_desert_improvements.ancient_piston": "Crumbling piston"
+	"block.humble_desert_improvements.ancient_piston": "Crumbling piston",
+	
+	"item.humble_desert_improvements.sandstone_pressure_plate": "Pressure plate",
+	"block.humble_desert_improvements.sandstone_pressure_plate": "Pressure plate",
+	
+	"item.humble_desert_improvements.signal_transfer_block": "Signal transfer block",
+	"block.humble_desert_improvements.signal_transfer_block": "Signal transfer block"
 }

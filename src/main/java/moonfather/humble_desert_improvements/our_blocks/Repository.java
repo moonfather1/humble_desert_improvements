@@ -4,6 +4,12 @@ import moonfather.humble_desert_improvements.Constants;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,6 +26,12 @@ public class Repository
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
-    public static final RegistryObject<Block> ANCIENT_PISTON = BLOCKS.register("ancient_piston", () -> new CrumblingPiston());
+    public static final RegistryObject<Block> ANCIENT_PISTON = BLOCKS.register("ancient_piston", CrumblingPiston::new);
     public static final RegistryObject<Item> ANCIENT_PISTON_ITEM = ITEMS.register("ancient_piston", () -> new BlockItem(ANCIENT_PISTON.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> PRESSURE_PLATE = BLOCKS.register("sandstone_pressure_plate", PressurePlate::new);
+    public static final RegistryObject<Item> PRESSURE_PLATE_ITEM = ITEMS.register("sandstone_pressure_plate", () -> new BlockItem(PRESSURE_PLATE.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> SIGNAL_TRANSFER_PIPE = BLOCKS.register("signal_transfer_block", SignalTransferBlock::new);
+    public static final RegistryObject<Item> SIGNAL_TRANSFER_PIPE_ITEM = ITEMS.register("signal_transfer_block", () -> new BlockItem(SIGNAL_TRANSFER_PIPE.get(), new Item.Properties()));
 }

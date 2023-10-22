@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "humble_desert_improvements:block/pressure_plate_down"
+    },
+    "powered=false": {
+      "model": "humble_desert_improvements:block/pressure_plate_normal"
+    }
+  }
+}
