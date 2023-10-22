@@ -3,6 +3,7 @@ package moonfather.humble_desert_improvements;
 import com.mojang.logging.LogUtils;
 import moonfather.humble_desert_improvements.our_blocks.Repository;
 import moonfather.humble_desert_improvements.temple_shaft_transformers.FourHusks;
+import moonfather.humble_desert_improvements.temple_shaft_transformers.SimplePlateAndTwoTnts;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -26,9 +27,19 @@ import java.util.function.BiConsumer;
 public class ModDesertChanges
 {
     public static final ArrayList< BiConsumer<WorldGenLevel, BlockPos> > DesertTempleTransformers = new ArrayList<>();
+    // make raiser block for trapped chest?
+    // make simple plate+2tnt trap
+    // sand trap after PD
+    // arrow trap is a must
+    // fire charge trap is a must
+    // block usage list:
+    //     movable chest: 1, fake piston 1,
+    //     crumbling dispenser: 0, trapped chest: 0,
+    //     tripwires: 0, stone pressure plate: 0,
+    //     sandy pressure plate: 0, tnt: 0,
+    //     pipe: 0, raiser: 0.
 
-
-
+    // reconsider loot tables. maybe silk touch for piston
 
 
 
@@ -48,6 +59,7 @@ public class ModDesertChanges
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         DesertTempleTransformers.add(FourHusks::setupHuskTrap);
+        DesertTempleTransformers.add(SimplePlateAndTwoTnts::setupSimplestTrap);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -58,7 +70,7 @@ public class ModDesertChanges
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
