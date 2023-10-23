@@ -2,6 +2,7 @@ package moonfather.humble_desert_improvements;
 
 import com.mojang.logging.LogUtils;
 import moonfather.humble_desert_improvements.our_blocks.Repository;
+import moonfather.humble_desert_improvements.temple_shaft_transformers.EscalatorsAndFireballs;
 import moonfather.humble_desert_improvements.temple_shaft_transformers.FourHusks;
 import moonfather.humble_desert_improvements.temple_shaft_transformers.SimplePlateAndTwoTnts;
 import net.minecraft.client.Minecraft;
@@ -27,19 +28,16 @@ import java.util.function.BiConsumer;
 public class ModDesertChanges
 {
     public static final ArrayList< BiConsumer<WorldGenLevel, BlockPos> > DesertTempleTransformers = new ArrayList<>();
-    // make raiser block for trapped chest?
-    // make simple plate+2tnt trap
     // sand trap after PD
     // arrow trap is a must
-    // fire charge trap is a must
     // block usage list:
     //     movable chest: 1, fake piston 1,
-    //     crumbling dispenser: 0, trapped chest: 0,
+    //     crumbling dispenser: 1, trapped chest: 1,
     //     tripwires: 0, stone pressure plate: 0,
-    //     sandy pressure plate: 0, tnt: 0,
-    //     pipe: 0, raiser: 0.
+    //     sandy pressure plate: 1, tnt: 1,
+    //     pipe: 0, raiser: 1.
 
-    // reconsider loot tables. maybe silk touch for piston
+    // maybe silk touch for piston
 
 
 
@@ -50,7 +48,6 @@ public class ModDesertChanges
     {
         Repository.init();
 
-        // Register the commonSetup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -60,6 +57,7 @@ public class ModDesertChanges
     {
         DesertTempleTransformers.add(FourHusks::setupHuskTrap);
         DesertTempleTransformers.add(SimplePlateAndTwoTnts::setupSimplestTrap);
+        DesertTempleTransformers.add(EscalatorsAndFireballs::setupFireChargeTrap);
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

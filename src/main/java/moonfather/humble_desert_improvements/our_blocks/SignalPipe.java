@@ -11,8 +11,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,9 +21,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SignalTransferBlock extends RepeaterBlock  // turn pipe to diode, make item
+public class SignalPipe extends RepeaterBlock
 {
-    public SignalTransferBlock()
+    public SignalPipe()
     {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.SAND).forceSolidOn().requiresCorrectToolForDrops().strength(0.3F).pushReaction(PushReaction.NORMAL));
     }
@@ -35,7 +33,7 @@ public class SignalTransferBlock extends RepeaterBlock  // turn pipe to diode, m
     @Override
     public InteractionResult use(BlockState p_55809_, Level p_55810_, BlockPos p_55811_, Player p_55812_, InteractionHand p_55813_, BlockHitResult p_55814_)
     {
-        return InteractionResult.PASS;
+        return InteractionResult.PASS; // no cycling delays
     }
 
     @Override
@@ -51,9 +49,9 @@ public class SignalTransferBlock extends RepeaterBlock  // turn pipe to diode, m
     }
 
     @Override
-    public BlockState updateShape(BlockState p_55821_, Direction p_55822_, BlockState p_55823_, LevelAccessor p_55824_, BlockPos p_55825_, BlockPos p_55826_)
+    public BlockState updateShape(BlockState blockState, Direction p_55822_, BlockState p_55823_, LevelAccessor p_55824_, BlockPos p_55825_, BlockPos p_55826_)
     {
-        return p_55821_;
+        return blockState;
     }
 
     @Override
@@ -75,36 +73,16 @@ public class SignalTransferBlock extends RepeaterBlock  // turn pipe to diode, m
 
     //////////////////////////////////////////////////////
 
-//    @Override
-//    protected void updateNeighborsInFront(Level level, BlockPos blockPos, BlockState blockState) {
-//        Direction direction = blockState.getValue(FACING);
-//        BlockPos blockpos = blockPos.relative(direction.getOpposite());
-//        if (! net.minecraftforge.event.ForgeEventFactory.onNeighborNotify(level, blockPos, level.getBlockState(blockPos), java.util.EnumSet.of(direction.getOpposite()), false).isCanceled())
-//        {
-//            level.neighborChanged(blockpos, this, blockPos);
-//            level.updateNeighborsAtExceptFromFacing(blockpos, this, direction);
-//        }
-//    }
-
     @Override
     public boolean shouldPrioritize(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
         BlockState blockstate1 = blockGetter.getBlockState(blockPos.relative(blockState.getValue(FACING)));
-        return blockstate1.getBlock() instanceof SignalTransferBlock;
+        return blockstate1.getBlock() instanceof SignalPipe;
     }
 
     @Override
     public boolean canSurvive(BlockState p_52538_, LevelReader p_52539_, BlockPos p_52540_) {
         return true;
     }
-
-//    @Override
-//    public int getSignal(BlockState state, BlockGetter blockGetter, BlockPos pos, Direction direction) {
-//        if (! state.getValue(POWERED)) {
-//            return 0;
-//        } else {
-//            return (state.getValue(FACING) == direction) ? this.getOutputSignal(blockGetter, pos, state) : 0;
-//        }
-//    }
 
     @Override
     protected int getOutputSignal(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {

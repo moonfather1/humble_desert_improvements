@@ -6,5 +6,8 @@
 	"block.humble_desert_improvements.sandstone_pressure_plate": "Потисна плоча",
 	
 	"item.humble_desert_improvements.signal_transfer_block": "Signal transfer block",
-	"block.humble_desert_improvements.signal_transfer_block": "Signal transfer block"
+	"block.humble_desert_improvements.signal_transfer_block": "Signal transfer block",
+	
+	"item.humble_desert_improvements.signal_escalator_block": "Signal raiser block",
+	"block.humble_desert_improvements.signal_escalator_block": "Signal raiser block"
 }
