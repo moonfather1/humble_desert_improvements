@@ -1,4 +1,4 @@
-package moonfather.humble_desert_improvements.mixins;
+package moonfather.humble_desert_improvements.pyramids.mixins;
 
 import moonfather.humble_desert_improvements.ModDesertChanges;
 import net.minecraft.core.BlockPos;
@@ -22,10 +22,10 @@ public class TempleShaftMixin
     @Inject(at = @At(value = "TAIL"), method = "postProcess", cancellable = false)
     public void testTail(WorldGenLevel genLevel, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource randomSource, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos, CallbackInfo ci)
     {
-        int index = Math.abs(pos.getX() + pos.getZ()) % (ModDesertChanges.DesertTempleTransformers.size() + 1);
+        int index = Math.abs(pos.getX() / 16 + pos.getZ() / 16) % (ModDesertChanges.DesertTempleTransformers.size() + 1);
         // x+z ensures a fixed transformation for a single start location.
         // this mixin will be called 4 times for 4 chunks containing a pyramid. it's fine so long as we stick to the same transformation.
-        //System.out.println("~~~mixinTest 1, pos==" + pos.getX() + ',' + pos.getZ() + "     index==" + index);
+        System.out.println("~~~mixinTest 1, pos==" + pos.getX() + ',' + pos.getZ() + "     index==" + index + "   y==" + pos.getY());
         if (index > 0)  // 0 is unchanged
         {
             ModDesertChanges.DesertTempleTransformers.get(index - 1).accept(genLevel, pos);

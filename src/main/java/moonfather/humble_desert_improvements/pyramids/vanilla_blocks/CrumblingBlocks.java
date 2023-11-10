@@ -1,4 +1,4 @@
-package moonfather.humble_desert_improvements.vanilla_blocks;
+package moonfather.humble_desert_improvements.pyramids.vanilla_blocks;
 
 import moonfather.humble_desert_improvements.Constants;
 import net.minecraft.core.particles.BlockParticleOption;

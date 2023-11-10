@@ -1,4 +1,4 @@
-package moonfather.humble_desert_improvements.our_blocks;
+package moonfather.humble_desert_improvements.pyramids.our_blocks;
 
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;

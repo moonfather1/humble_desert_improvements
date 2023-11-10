@@ -1,9 +1,9 @@
-package moonfather.humble_desert_improvements.temple_shaft_transformers;
+package moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers;
 
 import moonfather.humble_desert_improvements.Constants;
-import moonfather.humble_desert_improvements.our_blocks.Repository;
-import moonfather.humble_desert_improvements.utility.TaskScheduler;
-import moonfather.humble_desert_improvements.vanilla_blocks.MovingBlocks;
+import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
+import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
+import moonfather.humble_desert_improvements.pyramids.vanilla_blocks.MovingBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -18,7 +18,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DirectionalBlock;

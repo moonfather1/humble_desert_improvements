@@ -1,4 +1,4 @@
-package moonfather.humble_desert_improvements.our_blocks;
+package moonfather.humble_desert_improvements.pyramids.our_blocks;
 
 import moonfather.humble_desert_improvements.Constants;
 import net.minecraft.world.item.BlockItem;

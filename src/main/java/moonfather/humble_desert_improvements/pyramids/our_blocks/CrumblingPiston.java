@@ -1,6 +1,6 @@
-package moonfather.humble_desert_improvements.our_blocks;
+package moonfather.humble_desert_improvements.pyramids.our_blocks;
 
-import moonfather.humble_desert_improvements.utility.TaskScheduler;
+import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;

@@ -1,6 +1,6 @@
-package moonfather.humble_desert_improvements.temple_shaft_transformers;
+package moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers;
 
-import moonfather.humble_desert_improvements.our_blocks.Repository;
+import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;

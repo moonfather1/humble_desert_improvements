@@ -1,4 +1,4 @@
-package moonfather.humble_desert_improvements.utility;
+package moonfather.humble_desert_improvements.pyramids.utility;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
