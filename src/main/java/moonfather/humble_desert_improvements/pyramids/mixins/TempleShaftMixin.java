@@ -25,7 +25,7 @@ public class TempleShaftMixin
         int index = Math.abs(pos.getX() / 16 + pos.getZ() / 16) % (ModDesertChanges.DesertTempleTransformers.size() + 1);
         // x+z ensures a fixed transformation for a single start location.
         // this mixin will be called 4 times for 4 chunks containing a pyramid. it's fine so long as we stick to the same transformation.
-        System.out.println("~~~mixinTest 1, pos==" + pos.getX() + ',' + pos.getZ() + "     index==" + index + "   y==" + pos.getY());
+        ////System.out.println("~~~mixinTest 1, pos==" + pos.getX() + ',' + pos.getZ() + "     index==" + index + "   y==" + pos.getY());
         if (index > 0)  // 0 is unchanged
         {
             ModDesertChanges.DesertTempleTransformers.get(index - 1).accept(genLevel, pos);

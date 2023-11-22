@@ -31,4 +31,10 @@ public class Repository
 
     public static final RegistryObject<Block> SIGNAL_TRANSFER_RAISER = BLOCKS.register("signal_escalator_block", SignalEscalator::new);
     public static final RegistryObject<Item> SIGNAL_TRANSFER_RAISER_ITEM = ITEMS.register("signal_escalator_block", () -> new BlockItem(SIGNAL_TRANSFER_RAISER.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> FACADE = BLOCKS.register("facade_block", Facade::new);
+    public static final RegistryObject<Item> FACADE_ITEM = ITEMS.register("facade_block", () -> new BlockItem(FACADE.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> VENT = BLOCKS.register("ancient_vent", Vent::new);
+    public static final RegistryObject<Item> VENT_ITEM = ITEMS.register("ancient_vent", () -> new BlockItem(VENT.get(), new Item.Properties()));
 }

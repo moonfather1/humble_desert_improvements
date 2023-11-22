@@ -39,7 +39,7 @@ public class CrumblingPiston extends DirectionalBlock
         return this.defaultBlockState().setValue(FACING, p_60166_.getNearestLookingDirection().getOpposite());
     }
 
-
+    // only particles below
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)

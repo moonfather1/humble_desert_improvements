@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "humble_desert_improvements:block/ancient_vent",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "humble_desert_improvements:block/ancient_vent",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "humble_desert_improvements:block/ancient_vent",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "humble_desert_improvements:block/ancient_vent",
+      "y": 0
+    }
+  }
+}

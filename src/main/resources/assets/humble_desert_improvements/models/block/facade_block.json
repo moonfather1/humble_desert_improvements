@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/cube_all", 
+	"textures": {
+		"sandstone": "minecraft:block/chiseled_sandstone",
+		"sandstone_b": "minecraft:block/sandstone_bottom",
+		"particle": "minecraft:block/sandstone"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 14],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#sandstone", "cullface": "north"},
+				"east": {"uv": [0, 14, 16, 16], "rotation": 90, "texture": "#sandstone_b", "cullface": "east"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#sandstone", "cullface": "south"},
+				"west": {"uv": [0, 14, 16, 16], "rotation": 270, "texture": "#sandstone_b", "cullface": "west"},
+				"up": {"uv": [0, 14, 16, 16], "texture": "#sandstone_b", "cullface": "up"},
+				"down": {"uv": [0, 14, 16, 16], "rotation": 180, "texture": "#sandstone_b", "cullface": "down"}
+			}
+		}
+	]
+}

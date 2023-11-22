@@ -2,6 +2,7 @@ package moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers
 
 import moonfather.humble_desert_improvements.Constants;
 import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
+import moonfather.humble_desert_improvements.pyramids.utility.TempleShaftUtilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Clearable;
@@ -19,19 +20,23 @@ public class EscalatorsAndFireballs
 {
     public static void setupFireChargeTrap(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
     {
+        // copy-paste: fix blue terracotta location.
+        int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        if (fixBlueTerracottaPosition != 0) { return; }
+        //////////////////////////////
+
         // first pick one direction for one dispenser. can't just call Direction.getRandom because this gets called 4 times.
         int posModulo = (posBlueTerracotta.getX() + 3 * posBlueTerracotta.getZ()) % 4; // 0..3
         Direction direction = directionList[posModulo];
+        // call main
+        setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction);
+    }
+    public static void setupFireChargeTrapInternal(WorldGenLevel genLevel, BlockPos posBlueTerracotta, Direction direction)
+    {
         BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
         // step 1: lose the 3x3 tnt below
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            for (int dz = -1; dz <= 1; dz++)
-            {
-                mpos.set(posBlueTerracotta.getX() + dx, posBlueTerracotta.getY() + -11 - 2, posBlueTerracotta.getZ() + dz);
-                genLevel.setBlock(mpos, Blocks.SANDSTONE.defaultBlockState(), 2);
-            }
-        }
+        TempleShaftUtilities.lose3x3TNT(genLevel, posBlueTerracotta, 20);
         // step 2: trapped chest
         int sx = direction.getStepX(), sz = direction.getStepZ();
         mpos.set(posBlueTerracotta.getX() + 2 * sx, posBlueTerracotta.getY() + -11, posBlueTerracotta.getZ() + 2 * sz);
@@ -61,6 +66,10 @@ public class EscalatorsAndFireballs
                 dispenserBlockEntity.addItem(new ItemStack(Items.FIRE_CHARGE, 1 + genLevel.getRandom().nextInt(2)));
             }
         }
+        // step 5: facade
+        mpos.set(posBlueTerracotta.getX() + 2 * sx, posBlueTerracotta.getY() + -11 + 1, posBlueTerracotta.getZ() + 2 * sz);
+        genLevel.setBlock(mpos, Repository.FACADE.get().defaultBlockState().setValue(BlockStateProperties.FACING, direction.getOpposite()), 2);
+
     }
     private static final Direction[] directionList = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
 }

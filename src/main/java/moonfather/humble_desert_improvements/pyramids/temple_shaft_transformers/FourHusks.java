@@ -3,6 +3,7 @@ package moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers
 import moonfather.humble_desert_improvements.Constants;
 import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
+import moonfather.humble_desert_improvements.pyramids.utility.TempleShaftUtilities;
 import moonfather.humble_desert_improvements.pyramids.vanilla_blocks.MovingBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,10 +36,18 @@ public class FourHusks
 {
     public static void setupHuskTrap(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
     {
+        // copy-paste: fix blue terracotta location.
+        int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        if (fixBlueTerracottaPosition != 0) { return; }
+        //////////////////////////////
+
+
         // todo: what if a player just takes the axe and whacks the chest open? do the same thing if it has the "move" marker
         // step 1: upside down stairs next to chests
         BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
-        for (Direction direction : Direction.Plane.HORIZONTAL) {
+        for (Direction direction : Direction.Plane.HORIZONTAL)
+        {
             int dx = direction.getStepX() * 2;
             int dz = direction.getStepZ() * 2;
             if (dx == 0) // dz is +2 or -2
@@ -67,29 +76,20 @@ public class FourHusks
             {
                 chest.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_MOVE);
                 chest.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_HANDLER, "husks");
-                MovingBlocks.Handlers.put("husks", FourHusks::tryMoveTrappedChest);
             }
         }
         // step 3: lose the tnt
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            for (int dz = -1; dz <= 1; dz++)
-            {
-                mpos.set(posBlueTerracotta.getX() + dx, posBlueTerracotta.getY() + -11 - 2, posBlueTerracotta.getZ() + dz);
-                genLevel.setBlock(mpos, Blocks.SANDSTONE.defaultBlockState(), 2);
-            }
-        }
-        // that's it for generation. there is much more MovingBlocks class, when player opens a chest.
+        TempleShaftUtilities.lose3x3TNT(genLevel, posBlueTerracotta, 30);
+        // that's it for generation. there is much more below, when the player opens a chest.
     }
     private static void setBlockToStairs(WorldGenLevel genLevel, BlockPos pos, Direction direction)
     {
         genLevel.setBlock(pos, Blocks.SANDSTONE_STAIRS.defaultBlockState().setValue(StairBlock.FACING, direction).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.STRAIGHT).setValue(StairBlock.WATERLOGGED, Boolean.valueOf(false)), 2);
-        //genLevel.getChunk(mpos).markPosForPostprocessing(mpos);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    private static void tryMoveTrappedChest(Level level, BlockPos chestPos)
+    public static void tryMoveTrappedChest(Level level, BlockPos chestPos)
     {
         BlockState state = level.getBlockState(chestPos);
         BlockPos center = chestPos.relative(state.getValue(HorizontalDirectionalBlock.FACING), 2);

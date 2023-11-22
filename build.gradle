@@ -162,7 +162,8 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    runtimeOnly fg.deobf("curse.maven:ydms-scorpions-577807:4626311")
+    implementation fg.deobf("curse.maven:ydms-scorpions-577807:4626311")
+    // really wanted without dependencies but stupid scorpions wouldn't cooperate
 }
 
 mixin {
