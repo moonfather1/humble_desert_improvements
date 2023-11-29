@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "humble_desert_improvements:block/palm_log_normal"
+    },
+    "axis=x": {
+      "model": "humble_desert_improvements:block/palm_log_normal",
+      "y": 90,
+      "x": 90
+    },
+    "axis=z": {
+      "model": "humble_desert_improvements:block/palm_log_normal",
+      "x": 90
+    }
+  }
+}
