@@ -3,7 +3,6 @@ package moonfather.humble_desert_improvements.pyramids.vanilla_blocks;
 import moonfather.humble_desert_improvements.Constants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;

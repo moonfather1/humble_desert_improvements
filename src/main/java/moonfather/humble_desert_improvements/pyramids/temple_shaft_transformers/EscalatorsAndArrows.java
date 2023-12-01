@@ -5,9 +5,17 @@ import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import moonfather.humble_desert_improvements.pyramids.utility.TempleShaftUtilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Clearable;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,10 +23,11 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class EscalatorsAndFireballs
+public class EscalatorsAndArrows
 {
-    public static void setupFireChargeTrap(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
+    public static void setupArrowTrap(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
@@ -26,13 +35,30 @@ public class EscalatorsAndFireballs
         if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
 
-        // first pick one direction for one dispenser. can't just call Direction.getRandom because this gets called 4 times.
-        int posModulo = (posBlueTerracotta.getX() + 3 * posBlueTerracotta.getZ()) % 4; // 0..3
-        Direction direction = directionList[posModulo];
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
+        //////////////////////////////
+
+        // first pick one direction for one dispenser. we can just call Direction.getRandom because this no longer gets called 4 times.
+        // previously we had to do things like   posModulo = (posBlueTerracotta.getX() + 3 * posBlueTerracotta.getZ()) % 4
+        Direction direction;
+        do direction = Direction.getRandom(genLevel.getRandom()); while (direction.getStepY() != 0);
         // call main
-        setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction);
+        setupArrowTrapInternal(genLevel, posBlueTerracotta, direction);
+        int random = genLevel.getRandom().nextInt(100);
+        if (random < 50)
+        {
+            setupArrowTrapInternal(genLevel, posBlueTerracotta, direction.getClockWise());
+        }
+        if (random < 12)
+        {
+            setupArrowTrapInternal(genLevel, posBlueTerracotta, direction.getCounterClockWise());
+        }
     }
-    public static void setupFireChargeTrapInternal(WorldGenLevel genLevel, BlockPos posBlueTerracotta, Direction direction)
+    public static void setupArrowTrapInternal(WorldGenLevel genLevel, BlockPos posBlueTerracotta, Direction direction)
     {
         BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
         // step 1: lose the 3x3 tnt below
@@ -63,7 +89,23 @@ public class EscalatorsAndFireballs
             dispenser.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_CRUMBLE);
             if (dispenser instanceof DispenserBlockEntity dispenserBlockEntity)
             {
-                dispenserBlockEntity.addItem(new ItemStack(Items.FIRE_CHARGE, 1 + genLevel.getRandom().nextInt(2)));
+                int random = genLevel.getRandom().nextInt(100);
+                if (random < 25)
+                {
+                    ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.NASTY_SLOWNESS.get());
+                    dispenserBlockEntity.addItem(tipped);
+                }
+                else if (random < 75)
+                {
+                    ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.STRONG_HARMING);
+                    dispenserBlockEntity.addItem(tipped);
+                }
+                else
+                {
+                    ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.UNLUCKY_POISON.get());
+                    dispenserBlockEntity.addItem(tipped);
+                }
+                dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1 + genLevel.getRandom().nextInt(2))); // 1-2
             }
         }
         // step 5: facade

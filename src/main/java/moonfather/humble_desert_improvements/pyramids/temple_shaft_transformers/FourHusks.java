@@ -4,12 +4,12 @@ import moonfather.humble_desert_improvements.Constants;
 import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
 import moonfather.humble_desert_improvements.pyramids.utility.TempleShaftUtilities;
-import moonfather.humble_desert_improvements.pyramids.vanilla_blocks.MovingBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,6 +18,7 @@ import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -38,9 +40,17 @@ public class FourHusks
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
+        //////////////////////////////
+
 
 
         // todo: what if a player just takes the axe and whacks the chest open? do the same thing if it has the "move" marker
@@ -76,6 +86,7 @@ public class FourHusks
             {
                 chest.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_MOVE);
                 chest.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_HANDLER, "husks");
+                chest.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_CANCELS_BREAKING, Constants.NBT.BOOLEAN_YES);
             }
         }
         // step 3: lose the tnt
@@ -137,6 +148,16 @@ public class FourHusks
                     Zombie husk = EntityType.HUSK.spawn((ServerLevel) level, mpos2, MobSpawnType.EVENT);
                     adjustHusk(husk, level.random);
                     makeBlockBreakParticles(level, mpos2, 0, 10);
+
+                    if (level.getRandom().nextInt(100) < 40)
+                    {
+                        mpos2.move(direction.getClockWise()); // some sus sand
+                        level.setBlockAndUpdate(mpos2, Blocks.SUSPICIOUS_SAND.defaultBlockState());
+                        if (level.getBlockEntity(mpos2) instanceof BrushableBlockEntity brushable)
+                        {
+                            brushable.setLootTable(Constants.SUS_SAND_TABLE, level.random.nextInt(1000));
+                        }
+                    }
                 }
             }
         }

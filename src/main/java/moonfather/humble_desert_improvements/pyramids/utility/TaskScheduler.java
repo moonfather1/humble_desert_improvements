@@ -50,7 +50,6 @@ public class TaskScheduler
                     i.remove();
                 }
             }
-            //System.out.println("~~~ tick " + event.side + "   " + event.phase + "   " + event.getServer().getTickCount());
         }
     }
 }

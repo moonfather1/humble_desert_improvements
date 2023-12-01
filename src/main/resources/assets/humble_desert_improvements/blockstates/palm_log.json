@@ -1,27 +1,16 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "humble_desert_improvements:block/ancient_piston",
+    "axis=y": {
+      "model": "humble_desert_improvements:block/palm_log_normal"
+    },
+    "axis=x": {
+      "model": "humble_desert_improvements:block/palm_log_normal",
+      "y": 90,
       "x": 90
     },
-    "facing=east": {
-      "model": "humble_desert_improvements:block/ancient_piston",
-      "y": 90
-    },
-    "facing=north": {
-      "model": "humble_desert_improvements:block/ancient_piston"
-    },
-    "facing=south": {
-      "model": "humble_desert_improvements:block/ancient_piston",
-      "y": 180
-    },
-    "facing=up": {
-      "model": "humble_desert_improvements:block/ancient_piston",
-      "x": 270
-    },
-    "facing=west": {
-      "model": "humble_desert_improvements:block/ancient_piston",
-      "y": 270
+    "axis=z": {
+      "model": "humble_desert_improvements:block/palm_log_normal",
+      "x": 90
     }
   }
 }

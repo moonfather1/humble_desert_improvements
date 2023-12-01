@@ -14,7 +14,7 @@ public class TempleShaftUtilities
         }
         BlockPos.MutableBlockPos mpos1 = new BlockPos.MutableBlockPos();
         mpos1.set(pos);
-        for (int i = 1; i <= 12; i++)
+        for (int i = 1; i <= 16; i++)
         {
             mpos1.move(0, -1, 0);
             if (genLevel.getBlockState(mpos1).is(Blocks.BLUE_TERRACOTTA))
@@ -23,7 +23,7 @@ public class TempleShaftUtilities
             }
         }
         mpos1.set(pos);
-        for (int i = 1; i <= 12; i++)
+        for (int i = 1; i <= 128; i++)
         {
             mpos1.move(0, 1, 0);
             if (genLevel.getBlockState(mpos1).is(Blocks.BLUE_TERRACOTTA))
@@ -58,5 +58,10 @@ public class TempleShaftUtilities
     public static void lose3x3TNT(WorldGenLevel genLevel, BlockPos posBlueTerracotta, int percentageChanceToRemoveStonePlate)
     {
         lose3x3TNT(genLevel, posBlueTerracotta, genLevel.getRandom().nextInt(100) < percentageChanceToRemoveStonePlate);
+    }
+
+    public static boolean isTNTRemoved(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
+    {
+        return genLevel.getBlockState(posBlueTerracotta.offset(0, -13, 0)).is(Blocks.SANDSTONE);
     }
 }

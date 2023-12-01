@@ -1,0 +1,38 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/cube_all",
+	"textures": {
+		"inside": "humble_desert_improvements:block/palm_log_top",
+		"particle": "humble_desert_improvements:block/palm_log",
+		"bark": "humble_desert_improvements:block/palm_log"
+	},
+	"elements": [
+		{
+			"name": "SlantedLevel3",
+			"from": [3.01, -3, 15.01],
+			"to": [12.99, 13, 23.99],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 0, 24]},
+			"faces": {
+				"north": {"uv": [1, 0, 11, 16], "texture": "#bark"},
+				"east": {"uv": [1, 0, 11, 16], "texture": "#bark"},
+				"south": {"uv": [1, 0, 11, 16], "texture": "#bark"},
+				"west": {"uv": [1, 0, 11, 16], "texture": "#bark"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "#inside"},
+				"down": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#inside"}
+			}
+		},
+		{
+			"name": "VerticalTop",
+			"from": [3, 12, 19],
+			"to": [13, 16, 29],
+			"faces": {
+				"north": {"uv": [1, 0, 11, 11.5], "texture": "#bark"},
+				"east": {"uv": [1, 0, 11, 11.5], "texture": "#bark"},
+				"south": {"uv": [1, 0, 11, 11.5], "texture": "#bark"},
+				"west": {"uv": [1, 0, 11, 11.5], "texture": "#bark"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "#inside"},
+				"down": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#inside"}
+			}
+		}
+	]
+}

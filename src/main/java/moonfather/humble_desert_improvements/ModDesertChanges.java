@@ -1,6 +1,7 @@
 package moonfather.humble_desert_improvements;
 
 import com.mojang.logging.LogUtils;
+import moonfather.humble_desert_improvements.palms.blocks.PalmRepository;
 import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers.*;
 import moonfather.humble_desert_improvements.pyramids.vanilla_blocks.MovingBlocks;
@@ -25,36 +26,32 @@ import java.util.function.BiConsumer;
 public class ModDesertChanges
 {
     public static final ArrayList< BiConsumer<WorldGenLevel, BlockPos> > DesertTempleTransformers = new ArrayList<>();
-    // sand trap after PD
-    // arrow trap is a must
+
     // block usage list:
-    //     movable chest: 1, fake piston 1,
-    //     crumbling dispenser: 1, trapped chest: 1,
+    //     movable chest: 3, fake piston 1,
+    //     crumbling dispenser: 3, trapped chest: 2,
     //     tripwires: 0, stone pressure plate: 0,
-    //     sandy pressure plate: 1, tnt: 1,
-    //     pipe: 0, raiser: 1.
-    // + facade for dispenser1 trap
-    // decide directions and count for dispenser1
-    // ~ verify posBlueTerracotta
-    // ~ bug: see that chest handlers persist across reloads
+    //     sandy pressure plate: 2, tnt: 1,
+    //     pipe: 1, raiser: 3, pot: 1.
+    // should make more with pots. other numbers can stay.            tchest+escalator+dispenser+tnt is a viable option
+
+    // sand trap after PD, maybe powdered sand.
     // IMC
-    // dispenser1 is okay but tame
     // message on pressure plate?
-    // ~ bug: had pot at -12 in pot1 trap
-    // un-hardcode dispensers in pot1 trap
-    // + when scorpions are fixed make tunnel smaller
-    // destroying moving blocks
-    // sus sand in husk trap?
-    // optimize some traps not to do work 4 times
+    // trap with rows of 3 pots instead of chests. pots are on stair-benches and break in unison revealing mini scorpions or baby husks? second row above. maybe fireballs behind one row.
+    // trap with scripted falling pots from wall holes. no drops, high damage. maybe piston left behind hole.
     // encrusted lapis and emerald. some more treasure in general (pots?)
     // maybe black scorpions in pots? or a 3x3 shaft with a big black scorpion...
-
+    ////////////////////////////////////////////////////
+    // date icon
+    // slanted log canSurvive, PalmVoid canSurvive
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ModDesertChanges()
     {
         Repository.init();
+        PalmRepository.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -62,22 +59,21 @@ public class ModDesertChanges
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        //DesertTempleTransformers.add(FourHusks::setupHuskTrap);
-        //DesertTempleTransformers.add(SimplePlateAndTwoTnts::setupSimplestTrap);
-        //DesertTempleTransformers.add(SimplePlateAndTwoTnts::setupSimplestTrapTwoCorners); // maybe with % remove stone plate
-        //DesertTempleTransformers.add(EscalatorsAndFireballs::setupFireChargeTrap); // it's a little timid
-        DesertTempleTransformers.add(AbovePotAndHusks::suspiciousPot);// randomize below thingy
-        DesertTempleTransformers.add(AbovePotAndHusks::suspiciousPot);// randomize below thingy
-        //DesertTempleTransformers.add(ArrowsFromBottomLevel::setupEightDispensers); // maybe 5% chance for an old version?
+        DesertTempleTransformers.add(FourHusks::setupHuskTrap);
+        DesertTempleTransformers.add(SimplePlateAndTwoTnts::setupSimplestTrap); // don't call two corners here, it is called from pot trap
+        DesertTempleTransformers.add(EscalatorsAndFireballs::setupFireChargeTrap);
+        DesertTempleTransformers.add(EscalatorsAndArrows::setupArrowTrap);
+        DesertTempleTransformers.add(AbovePotAndHusks::suspiciousPot);
+        DesertTempleTransformers.add(ArrowsFromBottomLevel::setupEightDispensers); // old version is called from pot trap
         if (ModList.get().isLoaded("scorpions"))
         {
-            DesertTempleTransformers.add(ScorpionsBehindMovingChests::setupTrap);
-            DesertTempleTransformers.add(ScorpionsBehindMovingChests::setupTrap);
-            DesertTempleTransformers.add(ScorpionsBehindMovingChests::setupTrap);
-            DesertTempleTransformers.add(ScorpionsBehindMovingChests::setupTrap);
+            DesertTempleTransformers.add(ScorpionBehindChestTiny::setupTrap);
+            DesertTempleTransformers.add(ScorpionBehindChestTiny::setupTrap); //two to increase odds
+            DesertTempleTransformers.add(ScorpionBehindChestBig::setupTrap);
         }
         MovingBlocks.Handlers.put("husks", FourHusks::tryMoveTrappedChest);
-        MovingBlocks.Handlers.put("scorpions_in_front", ScorpionsBehindMovingChests::tryMakeHorizontalShaft);
+        MovingBlocks.Handlers.put("scorpions_in_front", ScorpionBehindChestTiny::tryMakeHorizontalShaft);
+        MovingBlocks.Handlers.put("big_frelling_scorpion", ScorpionBehindChestBig::tryMakeBigHorizontalShaft);
         MovingBlocks.Handlers.put("husks_above_shaft", AbovePotAndHusks::itsATrap);
     }
 

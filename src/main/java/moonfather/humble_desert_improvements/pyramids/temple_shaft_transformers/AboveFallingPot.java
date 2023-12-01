@@ -11,8 +11,8 @@ public class AboveFallingPot
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
 
 

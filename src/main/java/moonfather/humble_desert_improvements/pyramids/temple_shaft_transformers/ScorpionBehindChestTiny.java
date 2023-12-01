@@ -1,11 +1,8 @@
 package moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers;
 
 import moonfather.humble_desert_improvements.Constants;
-import moonfather.humble_desert_improvements.pyramids.our_blocks.Repository;
 import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
-import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler2;
 import moonfather.humble_desert_improvements.pyramids.utility.TempleShaftUtilities;
-import moonfather.humble_desert_improvements.pyramids.vanilla_blocks.MovingBlocks;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,52 +13,54 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.DispenserBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class ScorpionsBehindMovingChests
+public class ScorpionBehindChestTiny
 {
     public static void setupTrap(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
+        //////////////////////////////
+
 
         // step 1: lose the 3x3 tnt below
         TempleShaftUtilities.lose3x3TNT(genLevel, posBlueTerracotta, 85);
         // call main
-        Direction direction = Direction.getRandom(genLevel.getRandom());
+        Direction direction;
+        do direction = Direction.getRandom(genLevel.getRandom()); while (direction.getStepY() != 0);
         setupTrapInternal(genLevel, posBlueTerracotta, direction);
         // maybe dispenser on opposite side
         if (genLevel.getRandom().nextInt(100) < 60)
         {
-            EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction.getOpposite());
+            EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction.getClockWise());
         }
         // maybe one more scorpion
         if (genLevel.getRandom().nextInt(100) < 50)
         {
-            setupTrapInternal(genLevel, posBlueTerracotta, direction.getClockWise());
+            setupTrapInternal(genLevel, posBlueTerracotta, direction.getOpposite());
             if (genLevel.getRandom().nextInt(100) < 30)
             {
                 EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction.getCounterClockWise());
@@ -83,6 +82,7 @@ public class ScorpionsBehindMovingChests
         {
             chest.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_MOVE);
             chest.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_HANDLER, "scorpions_in_front");
+            chest.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_CANCELS_BREAKING, Constants.NBT.BOOLEAN_YES);
         }
     }
 
@@ -120,14 +120,14 @@ public class ScorpionsBehindMovingChests
         ((ServerLevel) level).playSound(null, chestPos, SoundEvents.DRIPSTONE_BLOCK_BREAK, SoundSource.BLOCKS, 0.5f, 0.3f);
         mpos.set(chestPos);
         mpos.move(Direction.UP);
-        TaskScheduler.queue(5, level, mpos, ScorpionsBehindMovingChests::makeBlockBreakParticlesInner);
-        TaskScheduler.queue(25, level, mpos, ScorpionsBehindMovingChests::makeBlockBreakParticlesInner);
+        TaskScheduler.queue(5, level, mpos, ScorpionBehindChestTiny::makeBlockBreakParticlesInner);
+        TaskScheduler.queue(25, level, mpos, ScorpionBehindChestTiny::makeBlockBreakParticlesInner);
         mpos.move(outWard);
-        TaskScheduler.queue(15, level, mpos, ScorpionsBehindMovingChests::makeBlockBreakParticlesInner);
+        TaskScheduler.queue(15, level, mpos, ScorpionBehindChestTiny::makeBlockBreakParticlesInner);
         ((ServerPlayer) player).lookAt(EntityAnchorArgument.Anchor.EYES, mpos.getCenter());
         mpos.move(outWard, 3);
-        TaskScheduler.queue(15, level, mpos, ScorpionsBehindMovingChests::makeBlockBreakParticlesInner);
-        TaskScheduler.queue(35, level, mpos, ScorpionsBehindMovingChests::makeBlockBreakParticlesInner);
+        TaskScheduler.queue(15, level, mpos, ScorpionBehindChestTiny::makeBlockBreakParticlesInner);
+        TaskScheduler.queue(35, level, mpos, ScorpionBehindChestTiny::makeBlockBreakParticlesInner);
         mpos.move(Direction.UP, 2);
         level.setBlockAndUpdate(mpos, Blocks.SANDSTONE.defaultBlockState());
         mpos.move(Direction.DOWN, 1);

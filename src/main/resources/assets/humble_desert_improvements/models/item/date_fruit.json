@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "humble_desert_improvements:item/date_fruit"
+  }
+}

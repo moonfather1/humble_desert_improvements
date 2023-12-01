@@ -1,9 +1,6 @@
 {
 	"replace": false,
 	"values": [
-		"humble_desert_improvements:ancient_piston",
-		"humble_desert_improvements:sandstone_pressure_plate",
-		"humble_desert_improvements:signal_transfer_block",
-		"humble_desert_improvements:signal_escalator_block"
+		"humble_desert_improvements:palm_log"
 	]
 }

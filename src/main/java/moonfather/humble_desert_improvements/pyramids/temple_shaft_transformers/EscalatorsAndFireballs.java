@@ -22,16 +22,36 @@ public class EscalatorsAndFireballs
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
 
-        // first pick one direction for one dispenser. can't just call Direction.getRandom because this gets called 4 times.
-        int posModulo = (posBlueTerracotta.getX() + 3 * posBlueTerracotta.getZ()) % 4; // 0..3
-        Direction direction = directionList[posModulo];
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
+        //////////////////////////////
+
+        // first pick one direction for one dispenser. we can just call Direction.getRandom because this no longer gets called 4 times.
+        // previously we had to do things like   posModulo = (posBlueTerracotta.getX() + 3 * posBlueTerracotta.getZ()) % 4
+        Direction direction;
+        do direction = Direction.getRandom(genLevel.getRandom()); while (direction.getStepY() != 0);
         // call main
         setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction);
+        int random = genLevel.getRandom().nextInt(100);
+        if (random < 66)
+        {
+            setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction.getClockWise());
+        }
+        if (random < 33)
+        {
+            setupFireChargeTrapInternal(genLevel, posBlueTerracotta, direction.getCounterClockWise());
+        }
     }
+
+
+
     public static void setupFireChargeTrapInternal(WorldGenLevel genLevel, BlockPos posBlueTerracotta, Direction direction)
     {
         BlockPos.MutableBlockPos mpos = new BlockPos.MutableBlockPos();
@@ -71,5 +91,4 @@ public class EscalatorsAndFireballs
         genLevel.setBlock(mpos, Repository.FACADE.get().defaultBlockState().setValue(BlockStateProperties.FACING, direction.getOpposite()), 2);
 
     }
-    private static final Direction[] directionList = new Direction[] { Direction.WEST, Direction.NORTH, Direction.EAST, Direction.SOUTH };
 }

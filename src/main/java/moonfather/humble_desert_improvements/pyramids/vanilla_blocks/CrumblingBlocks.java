@@ -1,7 +1,6 @@
 package moonfather.humble_desert_improvements.pyramids.vanilla_blocks;
 
 import moonfather.humble_desert_improvements.Constants;
-import moonfather.humble_desert_improvements.pyramids.temple_shaft_transformers.FourHusks;
 import moonfather.humble_desert_improvements.pyramids.utility.TaskScheduler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,7 +51,11 @@ public class CrumblingBlocks
         {
             if (event.getLevel() instanceof Level level)
             {
-                event.setCanceled(true);
+                if (! chest.getPersistentData().getString(Constants.NBT.BEHAVIOR_MOVE_CANCELS_BREAKING).equals(Constants.NBT.BOOLEAN_NO))
+                {
+                    event.setCanceled(true);
+                    level.sendBlockUpdated(event.getPos(), event.getState(), event.getState(), 2);
+                }
                 MovingBlocks.runSpecifiedAction(level, chest, event.getPos());
             }
         }

@@ -20,10 +20,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class AbovePotAndHusks
@@ -32,8 +31,8 @@ public class AbovePotAndHusks
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
         //////////////////////////////
 
         BlockPos above = posBlueTerracotta.above();
@@ -41,7 +40,8 @@ public class AbovePotAndHusks
         {
             return;
         }
-        genLevel.setBlock(above, Blocks.DECORATED_POT.defaultBlockState().setValue(BlockStateProperties.CRACKED, true), 3);
+        BlockState potState = Blocks.DECORATED_POT.defaultBlockState().setValue(BlockStateProperties.CRACKED, true);
+        genLevel.setBlock(above, potState, 3);
         if (genLevel.getBlockEntity(above) instanceof DecoratedPotBlockEntity pot)
         {
             CompoundTag tag = pot.saveWithFullMetadata();
@@ -54,9 +54,25 @@ public class AbovePotAndHusks
             pot.load(tag);
             pot.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_MOVE);
             pot.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_HANDLER, "husks_above_shaft");
+            pot.getPersistentData().putString(Constants.NBT.BEHAVIOR_MOVE_CANCELS_BREAKING, Constants.NBT.BOOLEAN_NO);
         }
-        EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, Direction.EAST);
-        EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, Direction.SOUTH);  // todo: don't hardcode
+
+        int random = genLevel.getRandom().nextInt(100);
+        if (random < 50)
+        {
+            Direction d1;
+            do d1 = Direction.getRandom(genLevel.getRandom()); while (d1.getStepY() != 0);
+            EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, d1);
+            EscalatorsAndFireballs.setupFireChargeTrapInternal(genLevel, posBlueTerracotta, d1.getClockWise());
+        }
+        else if (random < 80)
+        {
+            SimplePlateAndTwoTnts.setupSimplestTrapTwoCorners(genLevel, posBlueTerracotta);
+        }
+        else if (random < 90)
+        {
+            ArrowsFromBottomLevel.setupEightDispensersOriginal(genLevel, posBlueTerracotta);
+        }
     }
 
     public static void itsATrap(Level level, BlockPos potPos)
@@ -70,13 +86,18 @@ public class AbovePotAndHusks
             {
                 mpos.set(potPos);
                 mpos.move(4 * dx, 0, 4 * dz);
-                Zombie husk = EntityType.HUSK.spawn((ServerLevel) level, mpos, MobSpawnType.EVENT);
-                husk.setBaby(false);
-                int healthPercentage = 10 + level.random.nextInt(40); //10-50 -> 30ish%
-                husk.setHealth(husk.getMaxHealth() * healthPercentage / 100f);
-                makeBlockBreakParticles(level, mpos, 0, 10, 25);
+                makeBlockBreakParticles(level, mpos, 35, 45, 60);
+                TaskScheduler.queue(40, level, mpos, AbovePotAndHusks::makeAHusk);
             }
         }
+    }
+
+    private static void makeAHusk(Level level, BlockPos pos)
+    {
+        Zombie husk = EntityType.HUSK.spawn((ServerLevel) level, pos, MobSpawnType.EVENT);
+        husk.setBaby(false);
+        int healthPercentage = 10 + level.random.nextInt(40); //10-50 -> 30ish%
+        husk.setHealth(husk.getMaxHealth() * healthPercentage / 100f);
     }
 
     private static void makeBlockBreakParticles(Level level, BlockPos pos, int... times)

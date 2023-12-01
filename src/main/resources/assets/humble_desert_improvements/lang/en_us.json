@@ -15,5 +15,17 @@
 	"block.humble_desert_improvements.facade_block": "Chiselled sandstone",
 	
 	"item.humble_desert_improvements.ancient_vent": "Ancient vent",
-	"block.humble_desert_improvements.ancient_vent": "Ancient vent"
+	"block.humble_desert_improvements.ancient_vent": "Ancient vent",
+
+
+
+
+	"item.humble_desert_improvements.palm_log": "Luun palm log",
+	"block.humble_desert_improvements.palm_log": "Luun palm log",
+	"block.humble_desert_improvements.palm_slanted_log": "Luun palm log",
+	"item.humble_desert_improvements.date_fruit": "Luun date",
+
+	"item.minecraft.tipped_arrow.effect.slowness3": "Ancient trap arrow",
+	"item.minecraft.tipped_arrow.effect.poison3": "Ancient trap arrow",
+	"item.minecraft.tipped_arrow.effect.poison4": "Ancient trap arrow"
 }

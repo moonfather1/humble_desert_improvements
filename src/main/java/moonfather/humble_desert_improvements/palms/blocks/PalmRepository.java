@@ -1,6 +1,8 @@
-package moonfather.humble_desert_improvements.pyramids.our_blocks;
+package moonfather.humble_desert_improvements.palms.blocks;
 
 import moonfather.humble_desert_improvements.Constants;
+import moonfather.humble_desert_improvements.pyramids.our_blocks.*;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -9,7 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class Repository
+public class PalmRepository
 {
     public static void init()
     {
@@ -20,21 +22,8 @@ public class Repository
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
-    public static final RegistryObject<Block> ANCIENT_PISTON = BLOCKS.register("ancient_piston", CrumblingPiston::new);
-    public static final RegistryObject<Item> ANCIENT_PISTON_ITEM = ITEMS.register("ancient_piston", () -> new BlockItem(ANCIENT_PISTON.get(), new Item.Properties()));
-
-    public static final RegistryObject<Block> PRESSURE_PLATE = BLOCKS.register("sandstone_pressure_plate", PressurePlate::new);
-    public static final RegistryObject<Item> PRESSURE_PLATE_ITEM = ITEMS.register("sandstone_pressure_plate", () -> new BlockItem(PRESSURE_PLATE.get(), new Item.Properties()));
-
-    public static final RegistryObject<Block> SIGNAL_TRANSFER_PIPE = BLOCKS.register("signal_transfer_block", SignalPipe::new);
-    public static final RegistryObject<Item> SIGNAL_TRANSFER_PIPE_ITEM = ITEMS.register("signal_transfer_block", () -> new BlockItem(SIGNAL_TRANSFER_PIPE.get(), new Item.Properties()));
-
-    public static final RegistryObject<Block> SIGNAL_TRANSFER_RAISER = BLOCKS.register("signal_escalator_block", SignalEscalator::new);
-    public static final RegistryObject<Item> SIGNAL_TRANSFER_RAISER_ITEM = ITEMS.register("signal_escalator_block", () -> new BlockItem(SIGNAL_TRANSFER_RAISER.get(), new Item.Properties()));
-
-    public static final RegistryObject<Block> FACADE = BLOCKS.register("facade_block", Facade::new);
-    public static final RegistryObject<Item> FACADE_ITEM = ITEMS.register("facade_block", () -> new BlockItem(FACADE.get(), new Item.Properties()));
-
-    public static final RegistryObject<Block> VENT = BLOCKS.register("ancient_vent", Vent::new);
-    public static final RegistryObject<Item> VENT_ITEM = ITEMS.register("ancient_vent", () -> new BlockItem(VENT.get(), new Item.Properties()));
+    public static final RegistryObject<Block> LOG_SIMPLE = BLOCKS.register("palm_log", SimpleTrunk::new);
+    public static final RegistryObject<Item> LOG_SIMPLE_ITEM = ITEMS.register("palm_log", () -> new BlockItem(LOG_SIMPLE.get(), new Item.Properties()));
+    public static final RegistryObject<Block> LOG_SLANTED = BLOCKS.register("palm_slanted_log", SlantedTrunk::new);
+    public static final RegistryObject<Item> DATE_ITEM = ITEMS.register("date_fruit", () -> new Item(new Item.Properties().food(Foods.DRIED_KELP)));
 }

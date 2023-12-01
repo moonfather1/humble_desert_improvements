@@ -1,16 +1,52 @@
 {
   "variants": {
-    "axis=y": {
-      "model": "humble_desert_improvements:block/palm_log_normal"
+    "facing=east,level=1": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_1",
+      "y": 270
     },
-    "axis=x": {
-      "model": "humble_desert_improvements:block/palm_log_normal",
-      "y": 90,
-      "x": 90
+    "facing=north,level=1": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_1",
+      "y": 180
     },
-    "axis=z": {
-      "model": "humble_desert_improvements:block/palm_log_normal",
-      "x": 90
+    "facing=south,level=1": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_1",
+      "y": 0
+    },
+    "facing=west,level=1": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_1",
+      "y": 90
+    },
+    "facing=east,level=2": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_2",
+      "y": 270
+    },
+    "facing=north,level=2": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_2",
+      "y": 180
+    },
+    "facing=south,level=2": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_2",
+      "y": 0
+    },
+    "facing=west,level=2": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_2",
+      "y": 90
+    },
+    "facing=east,level=3": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_3",
+      "y": 270
+    },
+    "facing=north,level=3": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_3",
+      "y": 180
+    },
+    "facing=south,level=3": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_3",
+      "y": 0
+    },
+    "facing=west,level=3": {
+      "model": "humble_desert_improvements:block/palm_log_slanted_3",
+      "y": 90
     }
   }
 }

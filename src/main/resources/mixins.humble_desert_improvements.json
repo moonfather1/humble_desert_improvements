@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "package": "moonfather.humble_desert_improvements.pyramids.mixins",
   "mixins": [
-    "ScorpionAccessor",
-    "ScorpionMixin",
+    "Scorpion1Mixin",
+    "Scorpion2Mixin",
     "TempleShaftMixin"
   ],
   "client": [

@@ -12,8 +12,15 @@ public class SimplePlateAndTwoTnts
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
         //////////////////////////////
 
         // step 1: lose the 3x3 tnt below
@@ -24,12 +31,21 @@ public class SimplePlateAndTwoTnts
         setupSimplestTrapInternal(genLevel, posBlueTerracotta, dx, dz);
     }
 
+
+
     public static void setupSimplestTrapTwoCorners(WorldGenLevel genLevel, BlockPos posBlueTerracotta)
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
         //////////////////////////////
 
         // step 1: lose the 3x3 tnt below
@@ -42,6 +58,8 @@ public class SimplePlateAndTwoTnts
         dz = -1 * dz;
         setupSimplestTrapInternal(genLevel, posBlueTerracotta, dx, dz);
     }
+
+
 
     private static void setupSimplestTrapInternal(WorldGenLevel genLevel, BlockPos posBlueTerracotta, int dx, int dz)
     {

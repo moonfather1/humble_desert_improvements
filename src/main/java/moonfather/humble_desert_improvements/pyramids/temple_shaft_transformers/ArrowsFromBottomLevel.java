@@ -21,8 +21,15 @@ public class ArrowsFromBottomLevel
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
         //////////////////////////////
 
         // step 1: lose the 3x3 tnt below
@@ -44,12 +51,22 @@ public class ArrowsFromBottomLevel
                     dispenser.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_CRUMBLE);
                     if (dispenser instanceof DispenserBlockEntity dispenserBlockEntity)
                     {
-                        if (genLevel.getRandom().nextInt(8) == 5)
+                        int random = genLevel.getRandom().nextInt(100);
+                        if (random < 25)
                         {
-                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.POISON);
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.STRONG_HARMING);
                             dispenserBlockEntity.addItem(tipped);
                         }
-                        dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1 + genLevel.getRandom().nextInt(3)));
+                        else if (random < 50)
+                        {
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.UNLUCKY_POISON.get());
+                            dispenserBlockEntity.addItem(tipped);
+                        }
+                        else
+                        {
+                            dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1));
+                        }
+                        dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1 + genLevel.getRandom().nextInt(2))); // 1-2
                     }
                 }
                 // step 3: redstone escalators
@@ -77,8 +94,15 @@ public class ArrowsFromBottomLevel
     {
         // copy-paste: fix blue terracotta location.
         int fixBlueTerracottaPosition = TempleShaftUtilities.getBlueTerracottaOffset(genLevel, posBlueTerracotta);
-        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
-        if (fixBlueTerracottaPosition != 0) { return; }
+        if (fixBlueTerracottaPosition == TempleShaftUtilities.NOT_FOUND) { return; }
+        if (fixBlueTerracottaPosition != 0) { posBlueTerracotta = posBlueTerracotta.offset(0, fixBlueTerracottaPosition, 0); }
+        //////////////////////////////
+
+        // this is called four times for four chunks that the pyramid takes up. while we can just have these run 4x, there are two reasons not to:
+        // 1) call dispenserBlockEntity.addItem(arrow); is cumulative. not a big deal but let's not.
+        // 2) setupOneDirectionTrap(randomDirection) results in 2-3 dispensers instead of one. solvable by getting direction from x and z. random enough.
+        // 3) speed. let's not lag the game if we can easily avoid it.
+        if (TempleShaftUtilities.isTNTRemoved(genLevel, posBlueTerracotta)) { return; }
         //////////////////////////////
 
         // step 1: lose the 3x3 tnt below
@@ -100,12 +124,37 @@ public class ArrowsFromBottomLevel
                     dispenser.getPersistentData().putString(Constants.NBT.BEHAVIOR, Constants.NBT.BEHAVIOR_CRUMBLE);
                     if (dispenser instanceof DispenserBlockEntity dispenserBlockEntity)
                     {
-                        if (genLevel.getRandom().nextInt(8) == 5)
+                        int random = genLevel.getRandom().nextInt(100);
+                        if (random < 10)
                         {
-                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.POISON);
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.NASTY_SLOWNESS.get());
                             dispenserBlockEntity.addItem(tipped);
                         }
-                        dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1 + genLevel.getRandom().nextInt(3)));
+                        else if (random < 25)
+                        {
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.STRONG_HARMING);
+                            dispenserBlockEntity.addItem(tipped);
+                        }
+                        else if (random < 35)
+                        {
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.NASTY_POISON.get());
+                            dispenserBlockEntity.addItem(tipped);
+                        }
+                        else if (random < 50)
+                        {
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Potions.HARMING);
+                            dispenserBlockEntity.addItem(tipped);
+                        }
+                        else if (random < 75)
+                        {
+                            ItemStack tipped = PotionUtils.setPotion(new ItemStack(Items.TIPPED_ARROW, 1), Repository.UNLUCKY_POISON.get());
+                            dispenserBlockEntity.addItem(tipped);
+                        }
+                        else
+                        {
+                            dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1));
+                        }
+                        dispenserBlockEntity.addItem(new ItemStack(Items.ARROW, 1 + genLevel.getRandom().nextInt(3))); // 1-3
                     }
                 }
                 // step 3: redstone escalators

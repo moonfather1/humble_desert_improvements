@@ -1,22 +1,24 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/cube_all", 
+	"parent": "minecraft:block/cube_all",
 	"textures": {
-		"particle": "humble_desert_improvements:block/palm_log",
 		"inside": "humble_desert_improvements:block/palm_log_top",
+		"particle": "humble_desert_improvements:block/palm_log",
 		"bark": "humble_desert_improvements:block/palm_log"
 	},
 	"elements": [
 		{
-			"from": [3, 0, 3],
-			"to": [13, 16, 13],
+			"name": "SlantedLevel2",
+			"from": [3.02, 4, 7.7],
+			"to": [13, 18, 16.68],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 0, 8]},
 			"faces": {
 				"north": {"uv": [1, 0, 11, 16], "texture": "#bark"},
 				"east": {"uv": [1, 0, 11, 16], "texture": "#bark"},
 				"south": {"uv": [1, 0, 11, 16], "texture": "#bark"},
 				"west": {"uv": [1, 0, 11, 16], "texture": "#bark"},
 				"up": {"uv": [3, 3, 13, 13], "texture": "#inside"},
-				"down": {"uv": [3, 3, 13, 13], "texture": "#inside"}
+				"down": {"uv": [3, 3, 13, 13], "rotation": 180, "texture": "#inside"}
 			}
 		}
 	]
